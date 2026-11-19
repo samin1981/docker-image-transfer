@@ -1,1 +1,26 @@
 
+name: Export Docker Image
+
+on:
+  workflow_dispatch:
+
+jobs:
+  export:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Pull Docker Image
+        run: |
+          docker pull --platform linux/amd64 hello-world:latest
+
+      - name: Save Docker Image
+        run: |
+          docker save -o hello-world.tar hello-world:latest
+
+      - name: Upload TAR Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: hello-world-image
+          path: hello-world.tar
+          retention-days: 7
+
