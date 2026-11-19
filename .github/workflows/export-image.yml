@@ -1,5 +1,5 @@
 
-name: Export Docker Image
+name: Export Docker Images
 
 on:
   workflow_dispatch:
@@ -9,18 +9,32 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Pull Docker Image
+      - name: Pull Redis Image
         run: |
-          docker pull --platform linux/amd64 hello-world:latest
+          docker pull --platform linux/amd64 redis:7.4
 
-      - name: Save Docker Image
+      - name: Save Redis Image
         run: |
-          docker save -o hello-world.tar hello-world:latest
+          docker save -o redis.tar redis:7.4
 
-      - name: Upload TAR Artifact
+      - name: Pull Kafka Image
+        run: |
+          docker pull --platform linux/amd64 apache/kafka:4.1.2
+
+      - name: Save Kafka Image
+        run: |
+          docker save -o kafka.tar apache/kafka:4.1.2
+
+      - name: Upload Redis Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: hello-world-image
-          path: hello-world.tar
+          name: redis-image
+          path: redis.tar
           retention-days: 7
 
+      - name: Upload Kafka Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: kafka-image
+          path: kafka.tar
+          retention-days: 7
