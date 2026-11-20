@@ -1,40 +1,23 @@
 
-name: Export Docker Images
+name: Export Java 21 Docker Image
 
 on:
   workflow_dispatch:
 
 jobs:
-  export:
+  export-image:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Pull Redis Image
-        run: |
-          docker pull --platform linux/amd64 redis:7.4
+      - name: Pull Java 21 Image
+        run: docker pull eclipse-temurin:21-jre-noble
 
-      - name: Save Redis Image
-        run: |
-          docker save -o redis.tar redis:7.4
+      - name: Save Docker Image
+        run: docker save -o java-21-jre.tar eclipse-temurin:21-jre-noble
 
-      - name: Pull Kafka Image
-        run: |
-          docker pull --platform linux/amd64 apache/kafka:4.1.2
-
-      - name: Save Kafka Image
-        run: |
-          docker save -o kafka.tar apache/kafka:4.1.2
-
-      - name: Upload Redis Artifact
+      - name: Upload Java 21 Image Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: redis-image
-          path: redis.tar
-          retention-days: 7
-
-      - name: Upload Kafka Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: kafka-image
-          path: kafka.tar
+          name: Java-21-JRE-image
+          path: java-21-jre.tar
           retention-days: 7
